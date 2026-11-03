@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  apex-resolve-api:
+    build: .
+    container_name: apex-resolve-api
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - PAYMENT_GATEWAY_URL=http://mock-payment-gateway:8001
+      - DATABASE_URL=sqlite:///./apex_support.db
+      - DEV_MODE=1
+      - JWT_SECRET=apex_resolve_docker_environment_jwt_secret_32bytes_minimum
+    depends_on:
+      - mock-payment-gateway
+    restart: unless-stopped
+
+  mock-payment-gateway:
+    build: .
+    container_name: mock-payment-gateway
+    command: ["uvicorn", "mock_gateways.payments:app", "--host", "0.0.0.0", "--port", "8001"]
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
