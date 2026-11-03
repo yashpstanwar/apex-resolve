@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ApexResolve - Customer Support & Settlement Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-elevated: #1e293b;
+      --surface-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+    }
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-badge {
+      font-size: 0.7rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      margin-left: 0.5rem;
+    }
+
+    main {
+      padding: 1.75rem 2rem;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 0.75rem;
+    }
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: all 0.15s ease;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .preset-scenarios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.25rem 0;
+    }
+    .chip {
+      background: var(--surface-elevated);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    button {
+      padding: 0.65rem 1rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+    button.primary {
+      background: var(--primary);
+      color: white;
+    }
+    button.primary:hover { background: var(--primary-hover); }
+    button.outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--surface-border);
+    }
+    button.outline:hover { background: var(--surface-elevated); }
+    button.success { background: var(--success); color: white; }
+    button.danger { background: var(--danger); color: white; }
+
+    .result-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-running { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+    .badge-waiting_approval { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .badge-waiting_customer { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid #8b5cf6; }
+    .badge-completed { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+
+    .code-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    th {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-title">ApexResolve</div>
+      <span class="brand-badge">Enterprise v1.0</span>
+    </div>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">
+      LangGraph Deterministic Governance Engine &bull; Zero Financial Hallucinations
+    </div>
+  </header>
+
+  <main>
+    <!-- Panel 1: Customer Portal -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">1. Customer Workspace</div>
+        <button id="refreshCaseBtn" class="outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">Refresh</button>
+      </div>
+
+      <div>
+        <label>Customer Account</label>
+        <select id="customerSelect"></select>
+      </div>
+
+      <div>
+        <label>Quick Scenarios</label>
+        <div class="preset-scenarios">
+          <span class="chip" onclick="setPreset('Where is my order? Track delivery.')">Order Status</span>
+          <span class="chip" onclick="setPreset('I returned my headphones last week but still no refund.')">Eligible Refund</span>
+          <span class="chip" onclick="setPreset('My monitor arrived cracked and broken.')">Damaged Claim</span>
+          <span class="chip" onclick="setPreset('Refund ord_1011 immediately (someone else order).')">Fraud / Isolation</span>
+        </div>
+      </div>
+
+      <div>
+        <label>Customer Inquiry / Complaint</label>
+        <textarea id="complaintInput" rows="3">I returned my headphones last week but still no refund.</textarea>
+      </div>
+
+      <button id="sendBtn" class="primary">Submit Customer Inquiry</button>
+
+      <div id="customerOutput"></div>
+    </div>
+
+    <!-- Panel 2: Reviewer & Governance Queue -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">2. Human-In-The-Loop Reviewer Queue</div>
+        <button id="refreshQueueBtn" class="outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">Refresh</button>
+      </div>
+      <div id="approvalQueueOutput"></div>
+    </div>
+
+    <!-- Panel 3: Financial Settlement Operations -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">3. Settlement & Gateway Operations</div>
+        <button id="refreshOpsBtn" class="outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">Refresh</button>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <label style="margin: 0; min-width: 90px;">Provider Mode:</label>
+        <select id="gatewayModeSelect" style="padding: 0.35rem 0.5rem; font-size: 0.75rem;">
+          <option value="normal">Normal (Instant)</option>
+          <option value="slow">Slow Network (1.5s)</option>
+          <option value="error_500">Error 500 (Pre-commit failure)</option>
+          <option value="timeout_after_accept">504 Timeout After Accept</option>
+        </select>
+        <button id="setModeBtn" class="outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">Set</button>
+      </div>
+
+      <div id="opsOutput" style="overflow-x: auto;"></div>
+    </div>
+
+    <!-- Panel 4: Audit Event Stream -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">4. Immutable Audit Timeline</div>
+        <button id="loadTimelineBtn" class="outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">Load Run</button>
+      </div>
+      <div>
+        <label>Workflow Run ID</label>
+        <input id="runIdInput" placeholder="run_...">
+      </div>
+      <div id="timelineOutput"></div>
+    </div>
+  </main>
+
+  <script>
+    const CUSTOMERS = [
+      ["cust_eligible", "Chitra - Eligible Refund (ord_1003)"],
+      ["cust_status", "Asha - Delivered Tracking (ord_1001)"],
+      ["cust_transit", "Bala - In-Transit Shipment (ord_1002)"],
+      ["cust_damaged", "Indu - Damaged Screen (ord_1009)"],
+      ["cust_damaged_full", "Jay - Damaged with Details (ord_1010)"],
+      ["cust_rettransit", "Dev - Return Not Received (ord_1004)"],
+      ["cust_outside", "Esha - Expired Window (ord_1005)"],
+      ["cust_processing", "Farid - Already Processing (ord_1006)"],
+      ["cust_refunded", "Gita - Already Refunded (ord_1007)"],
+      ["cust_conflict", "Hari - Missing Timestamp (ord_1008)"],
+      ["cust_attacker", "Leela - Cross-Order Access (ord_1012)"],
+      ["cust_pol_v1", "Mohan - Legacy 30d Policy (ord_1013)"],
+      ["cust_pol_v2", "Nisha - Strict 15d Policy (ord_1014)"]
+    ];
+
+    const $ = id => document.getElementById(id);
+    const selectEl = $("customerSelect");
+    CUSTOMERS.forEach(([id, name]) => selectEl.add(new Option(name, id)));
+
+    function setPreset(text) {
+      $("complaintInput").value = text;
+    }
+
+    const tokens = {};
+    async function getToken(sub, role) {
+      const key = `${sub}:${role}`;
+      if (!tokens[key]) {
+        const res = await fetch("/dev/token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sub, role })
+        });
+        const data = await res.json();
+        tokens[key] = data.token;
+      }
+      return tokens[key];
+    }
+
+    async function callApi(path, method = "GET", body = null, sub = "cust_eligible", role = "customer") {
+      const token = await getToken(sub, role);
+      const res = await fetch(path, {
+        method,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.detail || res.statusText);
+      return json;
+    }
+
+    const formatMoney = m => "₹" + Math.floor(m / 100).toLocaleString("en-IN") + "." + String(m % 100).padStart(2, "0");
+
+    function renderRun(container, run, cust) {
+      const statusBadge = `<span class="badge badge-${run.status}">${run.status}</span>`;
+      let content = `
+        <div class="result-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            ${statusBadge}
+            <span class="code-meta">run ${run.run_id} &bull; ticket ${run.ticket_id}</span>
+          </div>
+          <div style="font-size: 0.9rem; line-height: 1.45;">
+            ${run.reply || (run.pending && run.pending.question) || (run.status === "waiting_approval" ? "Action proposal waiting for reviewer sign-off. Zero funds moved." : "")}
+          </div>
+      `;
+
+      if (run.status === "waiting_customer") {
+        const missing = run.pending.missing || [];
+        content += `<div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">`;
+        missing.forEach(k => {
+          content += `<input id="field_${k}" placeholder="${k}" />`;
+        });
+        content += `<button id="submitInfoBtn" class="primary" style="margin-top: 0.25rem;">Submit Missing Details</button></div>`;
+      }
+      content += `</div>`;
+      container.innerHTML = content;
+      $("runIdInput").value = run.run_id;
+
+      if (run.status === "waiting_customer") {
+        $("submitInfoBtn").onclick = async () => {
+          const body = {};
+          (run.pending.missing || []).forEach(k => {
+            const val = $(`field_${k}`).value.trim();
+            if (val) body[k] = val;
+          });
+          try {
+            const updated = await callApi(`/runs/${run.run_id}/messages`, "POST", body, cust, "customer");
+            renderRun(container, updated, cust);
+            loadApprovals();
+            loadOperations();
+          } catch (err) {
+            alert(err.message);
+          }
+        };
+      }
+    }
+
+    $("sendBtn").onclick = async () => {
+      const out = $("customerOutput");
+      out.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem;">Processing workflow...</div>`;
+      const cust = $("customerSelect").value;
+      const msg = $("complaintInput").value;
+      try {
+        const run = await callApi("/runs", "POST", { message: msg }, cust, "customer");
+        renderRun(out, run, cust);
+        loadApprovals();
+        loadOperations();
+      } catch (err) {
+        out.innerHTML = `<div class="result-card" style="border-color: var(--danger); color: var(--danger);">Error: ${err.message}</div>`;
+      }
+    };
+
+    $("refreshCaseBtn").onclick = async () => {
+      const id = $("runIdInput").value.trim();
+      const cust = $("customerSelect").value;
+      if (!id) return;
+      try {
+        const run = await callApi(`/runs/${id}`, "GET", null, cust, "customer");
+        renderRun($("customerOutput"), run, cust);
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    async function loadApprovals() {
+      const out = $("approvalQueueOutput");
+      try {
+        const list = await callApi("/approvals", "GET", null, "reviewer_1", "reviewer");
+        if (!list.length) {
+          out.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem; padding: 0.75rem 0;">No proposals pending review.</div>`;
+          return;
+        }
+        out.innerHTML = list.map(a => {
+          const p = a.proposal;
+          return `
+            <div class="result-card" style="margin-bottom: 0.75rem;">
+              <div style="display: flex; justify-content: space-between;">
+                <b>Refund Proposal: ${formatMoney(p.amount_minor)}</b>
+                <span class="badge badge-waiting_approval">Rev ${a.revision}</span>
+              </div>
+              <div style="font-size: 0.82rem; color: var(--text-muted);">
+                Order: ${p.order_id} &bull; Reason: ${p.reason_code}
+              </div>
+              <div style="font-size: 0.82rem;">Policy: ${(p.policy_refs || []).join(", ")}</div>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button class="success" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="decide('${a.approval_id}', 'approved')">Approve</button>
+                <button class="danger" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="decide('${a.approval_id}', 'rejected')">Reject</button>
+                <button class="outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="requestChanges('${a.approval_id}')">Request Info</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      } catch (err) {
+        out.innerHTML = `<div style="color: var(--danger); font-size: 0.85rem;">Failed loading queue: ${err.message}</div>`;
+      }
+    }
+    $("refreshQueueBtn").onclick = loadApprovals;
+
+    window.decide = async (id, decision, notes = null) => {
+      try {
+        const res = await callApi(`/approvals/${id}/decision`, "POST", { decision, notes }, "reviewer_1", "reviewer");
+        loadApprovals();
+        loadOperations();
+        if (res.run_id) {
+          $("runIdInput").value = res.run_id;
+          $("loadTimelineBtn").click();
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.requestChanges = async (id) => {
+      const notes = prompt("What additional documentation or details does the customer need to provide?");
+      if (notes) {
+        await decide(id, "changes_requested", notes);
+      }
+    };
+
+    async function loadOperations() {
+      const out = $("opsOutput");
+      try {
+        const ops = await callApi("/refund-operations", "GET", null, "reviewer_1", "reviewer");
+        if (!ops.length) {
+          out.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem;">No settlement operations yet.</div>`;
+          return;
+        }
+        let rows = ops.map(o => `
+          <tr>
+            <td>${o.order_id}</td>
+            <td><b>${formatMoney(o.amount_minor)}</b></td>
+            <td><span class="badge badge-${o.status === 'succeeded' ? 'completed' : 'waiting_approval'}">${o.status}</span></td>
+            <td class="code-meta">${o.provider_reference || '-'}</td>
+            <td>
+              ${["reserved", "unknown", "submitted"].includes(o.status) ?
+                `<button class="outline" style="padding: 0.25rem 0.5rem; font-size: 0.7rem;" onclick="reconcileOp('${o.id}')">Reconcile</button>` : ''}
+            </td>
+          </tr>
+        `).join("");
+        out.innerHTML = `<table><thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Provider Ref</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
+      } catch (err) {
+        out.innerHTML = `<div style="color: var(--danger); font-size: 0.85rem;">Failed loading operations: ${err.message}</div>`;
+      }
+    }
+    $("refreshOpsBtn").onclick = loadOperations;
+
+    window.reconcileOp = async (id) => {
+      try {
+        await callApi(`/refund-operations/${id}/reconcile`, "POST", null, "reviewer_1", "reviewer");
+        loadOperations();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    $("loadTimelineBtn").onclick = async () => {
+      const runId = $("runIdInput").value.trim();
+      const out = $("timelineOutput");
+      if (!runId) return;
+      try {
+        const [events, run] = await Promise.all([
+          callApi(`/runs/${runId}/events`, "GET", null, "reviewer_1", "reviewer"),
+          callApi(`/runs/${runId}`, "GET", null, "reviewer_1", "reviewer")
+        ]);
+        const ticket = await callApi(`/tickets/${run.ticket_id}`, "GET", null, "reviewer_1", "reviewer");
+
+        let html = `
+          <div class="result-card" style="margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <b>Ticket #${ticket.ticket_id} Status</b>
+              <span class="badge badge-completed">${ticket.status}</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">${ticket.public_note || '(No note)'}</div>
+          </div>
+          <table>
+            <thead><tr><th>Time</th><th>Actor</th><th>Event</th></tr></thead>
+            <tbody>
+              ${events.map(e => `
+                <tr>
+                  <td class="code-meta">${e.at.slice(11, 19)}</td>
+                  <td>${e.actor}</td>
+                  <td><b>${e.event}</b></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+        out.innerHTML = html;
+      } catch (err) {
+        out.innerHTML = `<div style="color: var(--danger); font-size: 0.85rem;">Timeline error: ${err.message}</div>`;
+      }
+    };
+
+    loadApprovals();
+    loadOperations();
+  </script>
+</body>
+</html>
