@@ -2,6 +2,7 @@
 
 [![Tests: Passing](https://img.shields.io/badge/Tests-26%20Passed-emerald)](https://github.com/yashpstanwar/apex-resolve)
 [![Evals: 64/64](https://img.shields.io/badge/Benchmark%20Evals-64%2F64%20(100%25)-blue)](https://github.com/yashpstanwar/apex-resolve)
+[![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-blueviolet)](https://github.com/yashpstanwar/apex-resolve/releases)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-indigo)](https://www.python.org/)
 [![FastAPI: 0.110+](https://img.shields.io/badge/FastAPI-Production%20Ready-009688)](https://fastapi.tiangolo.com/)
 [![LangGraph: StateGraph](https://img.shields.io/badge/Orchestrator-LangGraph%20v1.2-orange)](https://langchain-ai.github.io/langgraph/)
