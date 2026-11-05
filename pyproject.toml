@@ -31,3 +31,6 @@ dev = [
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 pythonpath = ["."]
+
+[tool.vercel]
+entrypoint = "api/index.py"

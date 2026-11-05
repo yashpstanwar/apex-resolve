@@ -128,6 +128,12 @@ def create_app(
         payload = {"sub": req.sub, "role": req.role, "exp": exp}
         return {"token": jwt.encode(payload, settings.jwt_secret, algorithm="HS256")}
 
+    @app.get("/", response_class=HTMLResponse)
+    def root_index():
+        """Root view renders the unified web console."""
+        index_file = Path(__file__).parent / "static" / "index.html"
+        return index_file.read_text(encoding="utf-8")
+
     @app.get("/ui", response_class=HTMLResponse)
     def web_console():
         """Unified Customer & Reviewer Operations Console."""
@@ -340,3 +346,7 @@ def create_app(
 def app_factory():
     """Uvicorn entry factory."""
     return create_app()
+
+
+# Module-level ASGI instance for direct serverless and ASGI runner imports
+app = create_app()

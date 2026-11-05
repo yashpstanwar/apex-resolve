@@ -1,12 +1,23 @@
 """Configuration management for ApexResolve."""
 import os
+import tempfile
 from dataclasses import dataclass, field
+
+
+def _get_default_database_url() -> str:
+    db = os.getenv("DATABASE_URL")
+    if db:
+        return db
+    if os.getenv("VERCEL"):
+        t = tempfile.gettempdir().replace("\\", "/")
+        return f"sqlite:///{t}/apex_support.db"
+    return "sqlite:///./apex_support.db"
 
 
 @dataclass
 class Settings:
     database_url: str = field(
-        default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./apex_support.db")
+        default_factory=_get_default_database_url
     )
     payment_url: str = field(
         default_factory=lambda: os.getenv("PAYMENT_GATEWAY_URL", "http://127.0.0.1:8001")
